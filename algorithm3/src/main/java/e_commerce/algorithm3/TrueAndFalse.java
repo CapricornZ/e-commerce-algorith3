@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import e_commerce.algorithm3.patterns.trueandfalse.Next;
+
 public class TrueAndFalse {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TrueAndFalse.class);
@@ -20,7 +22,8 @@ public class TrueAndFalse {
 	public void print(){
 		
 		StringBuilder sBuild = new StringBuilder();
-		int countTrue = 0, countFalse = 0;
+		this.countTrue = 0;
+		this.countFalse = 0;
 		for(Boolean o:this.result){
 			if(o){
 				countTrue ++;
@@ -30,7 +33,9 @@ public class TrueAndFalse {
 				sBuild.append("x");
 			}
 		}
-		logger.info("{}", sBuild);
+		this.strValue = sBuild.toString();
+		
+		logger.info("{}", this.strValue);
 		
 		logger.info(" [ x:{} ({}%), o:{} ({}%) ]\r\n", 
 				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)), 
@@ -39,14 +44,15 @@ public class TrueAndFalse {
 	
 	public void run(int offset){
 		
-		int max = 0;
-		int sum = 0;
+		this.max = 0;
+		this.sum = 0;
 		int indexSourceStep3 = 0;
 		for (int indexSource = offset; indexSource < result.size(); indexSource++) {
 			
-			if(max < metaData[indexSourceStep3])
-				max = metaData[indexSourceStep3];
-			
+			int current = metaData[indexSourceStep3];
+			if(max < current)
+				max = current;
+				
 			if (result.get(indexSource)) {
 				sum += metaData[indexSourceStep3];
 				logger.info("+{}", metaData[indexSourceStep3]);
@@ -57,8 +63,21 @@ public class TrueAndFalse {
 				logger.info("-{}", metaData[indexSourceStep3]);
 				indexSourceStep3 += 1;
 			}
+			
+			if(Next.go2First(result, indexSource+1, current))
+				indexSourceStep3 = 0;
 		}
 		logger.info(" = {} [ MAX: {} ]\r\n", sum, max);
+
 	}
+	
+	private int sum, max;
+	private int countTrue, countFalse;
+	private String strValue;
+	
+	public int getSum(){return sum;}
+	public int getMax(){return max;}
+	public int getCountTrue(){return countTrue;}
+	public int getCountFalse(){return countFalse;}
 
 }

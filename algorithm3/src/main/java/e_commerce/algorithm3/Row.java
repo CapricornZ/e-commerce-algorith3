@@ -23,7 +23,7 @@ public class Row {
 				List<Boolean> result = new ArrayList<Boolean>();
 				boolean shouldStop = false;
 				int index=0;
-				for(; !shouldStop; index++){
+				for(; !shouldStop && i+index+1<source.size(); index++){
 					
 					result.add(source.get(i+index+1) == 3);
 					shouldStop = new e_commerce.algorithm3.patterns.pattern2.Pattern2().shouldStop(result);
@@ -37,7 +37,7 @@ public class Row {
 				List<Boolean> result = new ArrayList<Boolean>();
 				boolean shouldStop = false;
 				int index=0;
-				for(; !shouldStop; index++){
+				for(; !shouldStop && i+index+1<source.size(); index++){
 					
 					result.add(source.get(i+index+1) == 2);
 					shouldStop = new e_commerce.algorithm3.patterns.pattern2.Pattern2().shouldStop(result);

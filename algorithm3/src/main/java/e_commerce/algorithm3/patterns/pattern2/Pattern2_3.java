@@ -14,7 +14,7 @@ public class Pattern2_3 implements IPattern {
 			return false;
 		
 		if(result.get(length-1) && result.get(length-2))
-			for(int i=length - 3; i>3; i--){
+			for(int i=length-3; i>3; i--){
 				if(result.get(i) && !result.get(i-1) && result.get(i-2) && !result.get(i-3) && result.get(i-4))
 					return false;
 			}

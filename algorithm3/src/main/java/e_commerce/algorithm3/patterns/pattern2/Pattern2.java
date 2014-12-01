@@ -6,12 +6,13 @@ public class Pattern2 implements IPattern {
 	
 	private static IPattern[] patterns;
 	static{
-		patterns = new IPattern[2];
+		patterns = new IPattern[5];
 		
 		patterns[0] = new TripleTrue();
 		patterns[1] = new DoubleTrueOnBothSide();
-		//patterns[2] = new Pattern2_3();
-		//patterns[3] = new Pattern2_4();
+		patterns[2] = new Pattern2_3();
+		patterns[3] = new Pattern2_4();
+		patterns[4] = new Pattern2_5();
 	}
 	
 	@Override
