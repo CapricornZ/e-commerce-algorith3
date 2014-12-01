@@ -86,7 +86,7 @@ public class App {
 						max = taf.getMax();
 				}	
 			}
-			logger.info("第{}段 [ SUM:{}, MAX:{}, x:{}({}%), o:{}({}%) ]\r\n", i+1, max, sum, 
+			logger.info("第{}段 [ SUM:{}, MAX:{}, x:{}({}%), o:{}({}%) ]\r\n", i+1, sum, max, 
 					countFalse, (float)countFalse*100/(float)(countFalse+countTrue),
 					countTrue, (float)countTrue*100/(float)(countFalse+countTrue));
 		}
