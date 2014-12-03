@@ -79,5 +79,6 @@ public class TrueAndFalse {
 	public int getMax(){return max;}
 	public int getCountTrue(){return countTrue;}
 	public int getCountFalse(){return countFalse;}
+	public List<Boolean> getResult(){return this.result;}
 
 }

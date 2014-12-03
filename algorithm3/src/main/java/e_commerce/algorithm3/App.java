@@ -5,32 +5,22 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import e_commerce.algorithm3.stastic.ISequentialStastic;
+import e_commerce.algorithm3.stastic.SequentialForSection;
 
 public class App {
 	
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	
 	public static void main(String[] args) throws IOException {
-		
-		/*List<Boolean> x = new ArrayList<Boolean>(){};
-		x.add(false);
-		x.add(false);
-		x.add(true);
-		x.add(false);
-		x.add(false);
-		x.add(true);
-		x.add(false);
-		x.add(false);
-		x.add(false);
-		x.add(true);
-		x.add(false);x.add(true);x.add(false);x.add(true);x.add(true);
-		
-		new TrueAndFalse(x).run(0);*/
-		
+
 		if(args.length != 1){
 			logger.error("params:file path required!\r\n");
 			return;
@@ -45,6 +35,7 @@ public class App {
 		String lineTxt = null;
 		List<List<TrueAndFalse>> totalResult = new ArrayList<List<TrueAndFalse>>();
 		int maxCountOfTaf = 0;
+		int number = 1;
 		while ((lineTxt = bufferedReader.readLine()) != null) {
 			
 			String source = lineTxt.trim();
@@ -54,6 +45,7 @@ public class App {
 			}
 			
 			SourceRow sRow = new SourceRow(source);
+			logger.debug("{}. ", number++);
 			sRow.print();
 			Row row = sRow.run();
 			List<TrueAndFalse> rtn = row.run();
@@ -72,9 +64,11 @@ public class App {
 		
 		logger.info("--------------------------------------------------\r\n");
 		logger.info("---------------------整个文件汇总-------------------\r\n");
-		for(int i=0; i<maxCountOfTaf; i++){
+		
+		for(int i=0; i<maxCountOfTaf; i++){//每一段的汇总
 			int sum = 0, max = 0;
 			int countTrue = 0, countFalse = 0;
+			Map<Integer, Integer> mapMaxCount = new HashMap<Integer, Integer>();//MAX的出现个数
 			for(List<TrueAndFalse> list : totalResult){
 				if(list.size() > i){
 					TrueAndFalse taf = list.get(i);
@@ -84,22 +78,33 @@ public class App {
 					countFalse += taf.getCountFalse();
 					if(max < taf.getMax())
 						max = taf.getMax();
+					
+					//统计MAX数的个数
+					Integer countOfMax = mapMaxCount.get(taf.getMax());
+					if(countOfMax != null)
+						mapMaxCount.put(taf.getMax(), countOfMax+1);
+					else
+						mapMaxCount.put(taf.getMax(), +1);
 				}	
 			}
-			logger.info("第{}段 [ SUM:{}, MAX:{}, x:{}({}%), o:{}({}%) ]\r\n", i+1, sum, max, 
+			logger.info("第{}段 \r\n\t[ SUM:{}, MAX:{}, x:{}({}%), o:{}({}%) ]\r\n", i+1, sum, max, 
 					countFalse, (float)countFalse*100/(float)(countFalse+countTrue),
 					countTrue, (float)countTrue*100/(float)(countFalse+countTrue));
+			logger.info("\t[ ");
+			for(Map.Entry<Integer, Integer> entry : mapMaxCount.entrySet())
+				logger.info("{}:{}, ", entry.getKey(), entry.getValue());
+			logger.info("]\r\n");
+			
+			//统计连续o/x的个数
+			ISequentialStastic seqStastic = new SequentialForSection();
+			seqStastic.run(totalResult, i);
+			for(int seq=1; seq<=seqStastic.getMaxCountOfSeq(); seq++){
+				logger.info("\tSEQ {} {x:{}, o:{}}\r\n", seq,
+						seqStastic.getCountOfSeqX().get(seq)==null?0:seqStastic.getCountOfSeqX().get(seq),
+						seqStastic.getCountOfSeqO().get(seq)==null?0:seqStastic.getCountOfSeqO().get(seq));
+			}
+
 		}
 		logger.info("--------------------------------------------------\r\n");
-		
-		//String source = "AABBAAABBBBAABABAAABAABAAAABAABBBAAAB";
-		//SourceRow sRow = new SourceRow(source);
-		//sRow.print();
-		//Row row = sRow.run();
-		//List<TrueAndFalse> rtn = row.run();
-		//for(TrueAndFalse taf : rtn){
-		//	taf.print();
-		//	taf.run(0);
-		//}
 	}
 }
