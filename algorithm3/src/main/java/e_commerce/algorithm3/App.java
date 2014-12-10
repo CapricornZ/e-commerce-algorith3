@@ -21,12 +21,13 @@ public class App {
 	
 	public static void main(String[] args) throws IOException {
 
-		if(args.length != 1){
-			logger.error("params:file path required!\r\n");
+		if(args.length != 2){
+			logger.error("APP should be followed by ${file PATH}, ${file TYPE}\r\n");
 			return;
 		}
 		
 		String filePath = args[0];
+		String fileType = args[1];
 		logger.info("----------------------------------------\r\n");
 		logger.info("start scanning {} ...\r\n", filePath);
 		logger.info("----------------------------------------\r\n");
@@ -44,7 +45,12 @@ public class App {
 				continue;
 			}
 			
-			SourceRow sRow = new SourceRow(source);
+			SourceRow sRow = null;
+			if(fileType.equals("0"))
+				sRow = new SourceRow(source);
+			else
+				sRow = SourceRowConvert.convert(source);
+			
 			logger.debug("{}. ", number++);
 			sRow.print();
 			Row row = sRow.run();
